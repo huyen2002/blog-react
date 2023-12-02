@@ -1,5 +1,6 @@
 import { LoadingButton } from '@mui/lab'
 import { ReactNode, useState } from 'react'
+import { toast } from 'react-toastify'
 
 const HandlerLoadingButton = ({
   color,
@@ -20,8 +21,9 @@ const HandlerLoadingButton = ({
     try {
       setIsLoading(true)
       await onClick()
-    } catch (e) {
+    } catch (e: any) {
       console.log(e)
+      toast.error(e.response.data.message)
     } finally {
       setIsLoading(false)
     }

@@ -1,5 +1,6 @@
 import { SubmitHandler, useForm } from 'react-hook-form'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
 import Brand from '../../components/Brand'
 import HandlerLoadingButton from '../../components/HandlerLoadingButton'
 import { Paths } from '../../routes/paths'
@@ -27,8 +28,12 @@ const SignUp = () => {
     mode: 'all',
   })
 
+  const navigate = useNavigate()
+
   const onSubmit: SubmitHandler<UserFullInfo> = async (data: UserFullInfo) => {
     await AuthService.signup(data)
+    toast.success('Sign up successfully')
+    navigate(Paths.SIGN_IN)
   }
   return (
     <div>

@@ -2,7 +2,8 @@ import { IconProp } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
 import Brand from '../../components/Brand'
 import HandlerLoadingButton from '../../components/HandlerLoadingButton'
 import { Paths } from '../../routes/paths'
@@ -25,8 +26,12 @@ const SignIn = () => {
     },
     mode: 'all',
   })
+
+  const navigate = useNavigate()
   const onSubmit: SubmitHandler<UserInfo> = async (data: UserInfo) => {
     await AuthService.login(data)
+    toast.success('Login successfully')
+    navigate(Paths.POSTS)
   }
   const [isShow, setIsShow] = useState<boolean>(false)
 
