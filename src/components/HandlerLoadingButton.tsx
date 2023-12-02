@@ -2,11 +2,13 @@ import { LoadingButton } from '@mui/lab'
 import { ReactNode, useState } from 'react'
 
 const HandlerLoadingButton = ({
+  color,
   size,
   varient,
   onClick,
   children,
 }: {
+  color: any
   size: string
   varient: string
   onClick: () => void
@@ -14,16 +16,12 @@ const HandlerLoadingButton = ({
 }) => {
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
-  const handleClick = () => {
+  const handleClick = async () => {
     try {
-      console.log('helklo', isLoading)
-
       setIsLoading(true)
-      onClick()
-
-      console.log('isLoading', isLoading)
+      await onClick()
     } catch (e) {
-      console.log('Error', e)
+      console.log(e)
     } finally {
       setIsLoading(false)
     }
@@ -34,12 +32,7 @@ const HandlerLoadingButton = ({
       variant={varient as any}
       onClick={handleClick}
       loading={isLoading}
-      sx={{
-        backgroundColor: '#4A54D1',
-        ':hover': {
-          backgroundColor: '#3e46c9',
-        },
-      }}
+      color={color}
     >
       {children}
     </LoadingButton>

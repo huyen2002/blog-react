@@ -4,9 +4,10 @@ import { useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { Link } from 'react-router-dom'
 import HandlerLoadingButton from '../../components/HandlerLoadingButton'
+import { AuthService } from '../../services/AuthService'
 
 type UserInfo = {
-  email: string
+  username: string
   password: string
 }
 
@@ -14,56 +15,52 @@ const SignIn = () => {
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
   } = useForm<UserInfo>({
     defaultValues: {
-      email: '',
+      username: '',
       password: '',
     },
     mode: 'all',
   })
-  const onSubmit: SubmitHandler<UserInfo> = (data: UserInfo) => {
-    console.log('hello')
-    alert(JSON.stringify(data))
+  const onSubmit: SubmitHandler<UserInfo> = async (data: UserInfo) => {
+    await AuthService.login(data)
   }
-  const [password, setPassword] = useState<string>('')
   const [isShow, setIsShow] = useState<boolean>(false)
+
+  const handleShowClick = () => {
+    setIsShow(!isShow)
+  }
   return (
-    <div className="w-1/3 flex flex-col justify-center m-auto">
+    <div className="w-full md:w-1/2 lg:w-1/3 flex flex-col justify-center md:m-auto">
       <div className="flex justify-center mt-20">
         <h1 className="text-3xl font-montserrat">Sign In</h1>
       </div>
-      <div>{password}///</div>
       <form className="mt-10">
         <div>
           <label
-            htmlFor="email"
+            htmlFor="username"
             className="input-label"
           >
-            Email
+            Username
           </label>
           <br />
           <input
-            type="email"
-            id="email"
+            id="username"
             className={`${
-              errors.email ? 'input-border-error' : 'input-border'
+              errors.username ? 'input-border-error' : 'input-border'
             } w-full`}
-            {...register('email', {
+            {...register('username', {
               required: {
                 value: true,
-                message: 'Please enter email',
-              },
-              pattern: {
-                value:
-                  /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-                message: 'Please enter a valid email',
+                message: 'Please enter username',
               },
             })}
           />
-          {errors.email && (
-            <div className="text-red-600 text-sm">{errors.email.message}</div>
+          {errors.username && (
+            <div className="text-red-600 text-sm">
+              {errors.username.message}
+            </div>
           )}
         </div>
         <div className="mt-5">
@@ -86,13 +83,11 @@ const SignIn = () => {
                   message: 'Please input your password',
                 },
               })}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            ></input>
+            />
 
             <button
               className="absolute right-2 top-1/3"
-              onClick={() => setIsShow(!isShow)}
+              onClick={handleShowClick}
             >
               <FontAwesomeIcon
                 icon={
@@ -118,9 +113,10 @@ const SignIn = () => {
           Forgot your password?
         </Link>
         <HandlerLoadingButton
+          color="primary"
           size="small"
           varient="contained"
-          onClick={handleSubmit(onSubmit)}
+          onClick={() => handleSubmit(onSubmit)()}
         >
           Sign in
         </HandlerLoadingButton>
