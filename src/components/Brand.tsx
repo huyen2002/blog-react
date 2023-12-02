@@ -3,7 +3,7 @@ import { Paths } from '../routes/paths'
 const Brand = () => {
   return (
     <Link to={Paths.HOME}>
-      <div className="flex w-auto items-center justify-between">
+      <div className="flex  items-center ">
         <img
           src="/logo.png"
           alt="logo"
